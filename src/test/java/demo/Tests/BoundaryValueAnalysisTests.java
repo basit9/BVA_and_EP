@@ -1,50 +1,43 @@
-package demo;
+package demo.Tests;
 
+import demo.Data.BoundaryValue.HigherBoundaryData;
+import demo.Data.BoundaryValue.LowerBoundaryData;
 import demo.Models.QueryParamData;
+import demo.Validations.Validations;
 import io.restassured.http.ContentType;
 import org.json.JSONObject;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
-
 import static io.restassured.RestAssured.given;
 
 public class BoundaryValueAnalysisTests {
 
-    private static Stream<QueryParamData> lowerBoundaries() {
-        return Stream.of(
-                new QueryParamData("age", 17),
-                new QueryParamData("age", 18),
-                new QueryParamData("age", 19)
-        );
-    }
+    private final Validations validationService = new Validations();
 
-    private static Stream<QueryParamData> higherBoundaries() {
-        return Stream.of(
-                new QueryParamData("age", 49),
-                new QueryParamData("age", 50),
-                new QueryParamData("age", 51)
-        );
-    }
-
-    @ParameterizedTest()
-    @MethodSource({"lowerBoundaries","higherBoundaries"})
-    public void boundariesTests(QueryParamData params){
-
+    @ParameterizedTest
+    @MethodSource("provideBoundaryData")
+    public void boundariesTests(QueryParamData params) {
         String jsonPayload = new JSONObject()
                 .put("name", "Alex")
                 .put("age", params.value())
                 .toString();
 
         String response = given()
-                .baseUri("https://*********/demo")
+                .baseUri("https://**********/demo")
                 .when()
                 .body(jsonPayload)
                 .post()
                 .then()
                 .contentType(ContentType.JSON)
                 .extract().response().asString();
-        System.out.println(response);
+        validationService.validateAgeResponse(params, response);
     }
 
+    static Stream<QueryParamData> provideBoundaryData() {
+        return Stream.concat(
+                new LowerBoundaryData().getData(),
+                new HigherBoundaryData().getData()
+        );
+    }
 }
