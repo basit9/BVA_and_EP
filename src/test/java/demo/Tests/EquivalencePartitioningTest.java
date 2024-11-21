@@ -28,7 +28,7 @@ public class EquivalencePartitioningTest {
                 .toString();
 
         String response = given()
-                .baseUri("https://************/demo")
+                .baseUri("https://api.abdul-basit.com/private/demo")
                 .when()
                 .body(jsonPayload)
                 .post()

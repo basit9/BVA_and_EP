@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bva-eq-tests
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bva-ep-tests
+  template:
+    metadata:
+      labels:
+        app: bva-ep-tests
+    spec:
+      containers:
+        - name: bva-ep-tests
+          image: demo101:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never

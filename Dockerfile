@@ -14,13 +14,10 @@ COPY src /app/src
 # Run tests and package the application
 RUN mvn clean test package
 
-# Copy test results to a location for report generation (optional)
-RUN cp -r target/surefire-reports /app/surefire-reports
-
 # Generate the report based on the test results (tests run only once)
 RUN mvn surefire-report:report-only
 
-# Compile the SimpleHttpServer and MyHandler classes
+# Compile the HttpServer classes
 RUN mvn compile
 
 # Expose the port the server will run on

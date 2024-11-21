@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bva-ep-tests-service
+spec:
+  selector:
+    app: bva-ep-tests
+  ports:
+    - protocol: TCP
+      port: 8080        # The port your HTTP server listens on
+      targetPort: 8080   # The container's internal port
+  type: NodePort

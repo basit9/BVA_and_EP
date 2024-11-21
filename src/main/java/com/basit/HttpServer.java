@@ -13,7 +13,7 @@ public class HttpServer {
 
     public static void main(String[] args) throws IOException {
         int port = Integer.parseInt(args[0]);
-        String reportsDir = "target/site";  // Directory where the reports are generated
+        String reportsDir = "target/reports";  // Directory where the reports are generated
 
         com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new MyHandler(reportsDir));
@@ -37,7 +37,7 @@ public class HttpServer {
 
             if (file.isDirectory()) {
                 // Serve index.html by default
-                file = new File(file, "surefire-report.html");
+                file = new File(file, "surefire.html");
             }
 
             if (file.exists()) {
